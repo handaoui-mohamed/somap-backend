@@ -5,9 +5,17 @@ class Comment(db.Model):
     comment_content=db.Column(db.String(500))
     rating=db.Column(db.Float)
     timestamp = db.Column(db.DateTime)
+    institution_id = db.Column(db.Integer, db.ForeignKey('institution.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    intitution_id = db.Column(db.Integer, db.ForeignKey('institution.id'))
-    #TODO: see ho to prevent the many version allow one comment
+
+    def to_json_min(self):
+        from app.user.models import User
+        return{
+            'id': self.id,
+            'content': self.comment_content,
+            'rating': self.rating,
+            'date': self.timestamp
+        }
 
     def to_json(self):
         from app.user.models import User
@@ -16,5 +24,5 @@ class Comment(db.Model):
             'content': self.comment_content,
             'rating': self.rating,
             'date': self.timestamp,
-            'user': User.query.get(user_id).to_json()
+            'user': User.query.get(self.user_id).to_json_min()
         }

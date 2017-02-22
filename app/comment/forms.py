@@ -29,7 +29,7 @@ class CommentForm(FlaskForm):
         if user is None:
             self.user_id.errors.append("L\'identifiant de l\'utilisateur n\'éxiste pas")
             return False
-        institution = institution.query.get(self.institution_id.data)
+        institution = Institution.query.get(self.institution_id.data)
         if institution is None:
             self.institution_id.errors.append("L\'identifiant de l\'instiution n\'éxiste pas")
             return False

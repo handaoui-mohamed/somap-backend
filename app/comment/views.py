@@ -7,7 +7,7 @@ import datetime
 from werkzeug.datastructures import MultiDict
 from flask import abort, request, jsonify
 
-@app.route('/api/comment',methods=["POST"])
+@app.route('/api/comments',methods=["POST"])
 def add_comment():
     data = request.get_json(force=True)
     form = CommentForm(MultiDict(mapping=data))
@@ -15,17 +15,17 @@ def add_comment():
         comment_content = data.get('comment_content')
         rating = data.get('rating')
         user = User.query.get(data.get('user_id'))
-        intitution = Institution.query.get(data.get('intitution_id'))
+        institution = Institution.query.get(data.get('institution_id'))
         comment=Comment(comment_content=comment_content,rating=rating,\
         timestamp=datetime.datetime.utcnow(),user=user,institution=institution)
         db.session.add(comment)
         db.session.commit() 
-        return jsonify({'element':comment.to_json()})
+        return jsonify({'element':comment.to_json()}),201
     return jsonify({"form_errors": form.errors}), 400
 
-@app.route('/api/comment/<int:id>',methods=["DELETE","PUT"])
+@app.route('/api/comments/<int:id>',methods=["DELETE","PUT"])
 def modify_comment(id):
-    comment = comment.query.get(id)
+    comment = Comment.query.get(id)
     if not comment:
             abort(404)
     if request.method == 'DELETE':

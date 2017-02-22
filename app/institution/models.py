@@ -10,7 +10,7 @@ class Institution(db.Model):
     fax = db.Column(db.String(30))
     longitude=db.Column(db.Float)
     latitude = db.Column(db.Float)
-    comments = db.relationship('Comment', backref='institutiton', lazy='dynamic')
+    comments = db.relationship('Comment', backref='institution', lazy='dynamic')
     institution_class_id = db.Column(db.Integer, db.ForeignKey('institution_class.id'))
     wilaya_id = db.Column(db.Integer, db.ForeignKey('wilaya.id'))
 

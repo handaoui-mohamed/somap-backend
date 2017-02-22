@@ -9,7 +9,7 @@ def get_intitution_classes():
     if request.method == 'GET':        
         institution_classes = InstitutionClass.query.all()
         return jsonify({'elements': [element.to_json_min() for element in institution_classes]})
-    else: #POST method
+    elif request.method == 'POST': #POST method
         data = request.get_json(force=True)
         form = InstitutionClassForm(MultiDict(mapping=data))
         if form.validate():
@@ -18,7 +18,7 @@ def get_intitution_classes():
             institution_class=InstitutionClass(class_denomination=class_denomination,icon_url=icon_url)
             db.session.add(institution_class)
             db.session.commit() 
-            return jsonify({'element':institution_class.to_json_min()})
+            return jsonify({'element':institution_class.to_json_min()}),201
         return jsonify({"form_errors": form.errors}), 400
 
 @app.route('/api/institution_classes/<int:id>',methods=["GET","DELETE","PUT"])

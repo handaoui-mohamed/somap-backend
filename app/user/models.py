@@ -49,7 +49,7 @@ class User(db.Model):
             'username': self.username,
             'full_name': self.full_name,
             'email': self.email,
-            'comments': [element.to_json() for element in self.comments.all()]
+            'comments': [element.to_json_min() for element in self.comments.all()]
         }
 
     def __repr__(self):
