@@ -18,8 +18,12 @@ class InstitutionClassForm(FlaskForm):
         if not FlaskForm.validate(self):
             return False
 
-        institution_class = InstitutionClass.query.filter_by(institution_class=self.institution_class.data).first()
+        institution_class = InstitutionClass.query.filter_by(class_denomination=self.class_denomination.data).first()
         if institution_class is not None:
-            self.institution_class.errors.append("Cette classe exite déja, veuillez choisir une autre!")
+            self.class_denomination.errors.append("Cette classe exite déja, veuillez choisir une autre!")
             return False
         return True
+    
+    def updateValidate(self):
+        if FlaskForm.validate(self):
+            return True

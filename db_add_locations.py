@@ -1,37 +1,37 @@
 #!flask/bin/python
 from app import db
 from app.institution.models import Institution
+from app.wilaya.models import Wilaya
+from app.institution_class.models import InstitutionClass
 import json
 
 # creation of all wilayas from wilaya.json
 with open("wilaya.json", "r") as wilaya_json:
     wilayas = json.load(wilaya_json)
 
-or wilaya in wilayas:
-    db.session.add(Wilaya(wilaya_name=wilaya["wilaya"])))
+for wilaya in wilayas:
+    db.session.add(Wilaya(wilaya_name=wilaya["wilaya"]))
     db.session.commit()
 
 # creation of insititution classes
-with open("institutionClasses.json", "r") as instritution_classe_json:
-    institution_classes = json.load(institution_classe_json)
+with open("institutionsClasses.json", "r") as institution_classes_json:
+    institution_classes = json.load(institution_classes_json)
 
-or institution_classe in institution_classes:
-    db.session.add(InstitutionClasse(class_denomination=institution_classe["classe_denomination"],icon_url=institution["iconUrl"]))
+for institution_class in institution_classes:
+    db.session.add(InstitutionClass(class_denomination=institution_class["classeDenomination"],icon_url=institution_class["iconUrl"]))
     db.session.commit()
 
 
 # creation of existing insitution in institution.json file
-with open("institution.json", "r") as instritution_json:
+with open("institutions.json", "r") as institution_json:
     institutions = json.load(institution_json)
 
 for institution in institutions:
 
-    new_institution=Institution(\
+    db.session.add(Institution(\
         denomination=institution["denomination"],description=institution["description"],\
         commune=institution["commune"],address=institution["adresse"],phone=institution["tel"],\
-        fax=institution["fax"],latitude=institution["position"]["lat"],longitude=institution["position"]["lng"])
-    new_institution.add_position(position.id)
-    new_insitution.add_wilaya(Number(institution["wilayaId"])+1)
-    new_insitution.add_classe(Number(Institution["typeId"])+1)
-    db.session.add(new_institution)
+        fax=institution["fax"],latitude=institution["position"]["lat"],longitude=institution["position"]["lng"],\
+        institution_class=InstitutionClass.query.get(int(institution["typeId"])+1),\
+        wilaya=Wilaya.query.get(int(institution["wilayaID"]))))
     db.session.commit()

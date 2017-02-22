@@ -4200,6 +4200,10 @@
 	},
 	{
 		"id": 280,
+		"position":{
+			"lat": 36.360155 ,
+			"lng": 6.642432999999983
+		},
 		"denomination": "Etablissement pour enfants prives de famille",
 		"typeId": "1",
 		"description": "Type de Foyer: 6-18 ans",

@@ -159,10 +159,3 @@ def search(page=1):
     total_pages = len(users)
     users = users[page-1] if (page <= len(users)) else []
     return jsonify({'total_pages': total_pages,'elements': [element.to_json() for element in users]})
-
-
-def calculate_haversine(location1, location2, search_area):
-    pos1 = location1["latitude"], location1["longitude"]
-    pos2 = location2["latitude"], location2["longitude"]
-    km = haversine(pos1,pos2)
-    return km <= search_area
