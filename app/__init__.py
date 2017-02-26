@@ -19,6 +19,7 @@ from app.institution_class import views
 from app.wilaya import views
 from app.contact import views
 from app.comment import views
+from app.commune import views
 
 # import models
 from app.user.models import User
@@ -26,3 +27,4 @@ from app.institution.models import Institution
 from app.institution_class.models import InstitutionClass
 from app.wilaya.models import Wilaya
 from app.comment.models import Comment
+from app.commune.models import Commune

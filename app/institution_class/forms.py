@@ -8,7 +8,7 @@ from app.institution_class.models import InstitutionClass
 class InstitutionClassForm(FlaskForm):
     class_denomination = StringField('class_denomination',validators=[
         DataRequired('La denomenation de la classe est nécessaire'),
-        Length(min=1, max=32, message="La denomination doit être > 1 et < 100 caractères")
+        Length(min=1, max=200, message="La denomination doit être > 1 et < 100 caractères")
     ])
     icon_url = StringField('icon_url',validators=[
         DataRequired('L\'url de l\'icon est nécessaire'),

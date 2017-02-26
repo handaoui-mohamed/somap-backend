@@ -4,6 +4,7 @@ class Wilaya(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     wilaya_name = db.Column(db.String(32), unique=True)
     institutions = db.relationship('Institution', backref='wilaya', lazy='dynamic')
+    communes = db.relationship('Commune', backref='wilaya', lazy='dynamic')
 
     def to_json_min(self):
         return{
@@ -15,5 +16,6 @@ class Wilaya(db.Model):
         return{
             'id': self.id,
             'name': self.wilaya_name,
-            'institutions': [element.to_json_min() for element in self.institutions.all()]
+            # 'institutions': [element.to_json_min() for element in self.institutions.all()]
+            'communes': [element.to_json_min() for element in self.communes.all()]
         }
