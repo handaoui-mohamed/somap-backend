@@ -1,5 +1,6 @@
 from app import db
 from app.commune.models import Commune
+from app.wilaya.models import Wilaya
 
 class Institution(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,7 +30,8 @@ class Institution(db.Model):
                 'lng': self.longitude
             },
             'typeId': self.institution_class_id,
-            'wilayaId': self.wilaya_id
+            'wilayaId': self.wilaya_id,
+            'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
         }
 
     def to_json(self):
@@ -47,5 +49,6 @@ class Institution(db.Model):
             },
             'typeId': self.institution_class_id,
             'wilayaId': self.wilaya_id,
+            'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
             'comments': [element.to_json() for element in self.comments.all()]
         }
