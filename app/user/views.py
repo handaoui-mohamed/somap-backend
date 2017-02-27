@@ -58,9 +58,10 @@ def new_user():
     if form.validate():
         username = data.get('username')
         password = data.get('password')
+        full_name = data.get('full_name')
         email = data.get('email')
         remember_me = data.get('remember_me', False)
-        user = User(username=username.lower(), email=email.lower())
+        user = User(username=username.lower(), email=email.lower(),full_name=full_name.lower())
         user.hash_password(password)
         db.session.add(user)
         db.session.commit()

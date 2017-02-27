@@ -6,6 +6,8 @@ from app.wilaya.models import Wilaya
 from app.commune.models import Commune
 import json
 
+#create admin user for instituion initial creation
+
 # creation of insititution classes
 with open("institutionsClasses.json", "r") as institution_classes_json:
     institution_classes = json.load(institution_classes_json)

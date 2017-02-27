@@ -15,6 +15,7 @@ class Institution(db.Model):
     institution_class_id = db.Column(db.Integer, db.ForeignKey('institution_class.id'))
     wilaya_id = db.Column(db.Integer, db.ForeignKey('wilaya.id'))
     commune_id = db.Column(db.Integer, db.ForeignKey('commune.id'))
+    # add user_id for the one who added this
 
     def to_json_min(self):
         return{
