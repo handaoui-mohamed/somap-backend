@@ -12,7 +12,7 @@ from haversine import haversine
 @app.route('/api/institutions',methods=["GET","POST"])
 def add_get_institutions():
     if request.method == 'GET':        
-        institution = Institution.query.all()
+        institution = Institution.query.filter_by(validated=True).all()
         return jsonify({'elements': [element.to_json_min() for element in institution]})
     elif request.method == 'POST': #POST Methode
         data = request.get_json(force=True)
@@ -36,35 +36,12 @@ def add_get_institutions():
             return jsonify({'element':institution.to_json_min()}),201
         return jsonify({"form_errors": form.errors}), 400
 
-@app.route('/api/institutions/<int:id>',methods=["GET","DELETE","PUT"])
-def modify_institution(id):
+@app.route('/api/institutions/<int:id>',methods=["GET"])
+def get_institution(id):
     institution = Institution.query.get(id)
-    if not institution:
+    if not institution or not institution.validated:
             abort(404)
-    if request.method == 'GET':
-        return jsonify({'elements': institution.to_json()}),200
-    elif request.method == 'DELETE':
-        db.session.delete(institution)
-        db.session.commit()
-        return jsonify({'success': 'true'}), 200
-    elif request.method == 'PUT': #PUT method
-        data = request.get_json(force=True)
-        form = InstitutionForm(MultiDict(mapping=data))
-        if form.validate():
-            institution.denomination = data.get('denomination').lower()
-            institution.description = data.get('description',institution.description).lower()
-            institution.address = data.get('address').lower()
-            institution.phone = data.get('phone',institution.phone)
-            institution.fax = data.get('fax',institution.fax)
-            institution.latitude = data.get('latitude')
-            institution.longitude = data.get('longitude')
-            institution.wilaya = Wilaya.query.get(data.get('wilaya_id'))
-            institution.commune = Commune.query.get(data.get('commune_id'))
-            institution.institution_class = InstitutionClass.query.get(data.get('class_id'))
-            db.session.add(institution)
-            db.session.commit() 
-            return jsonify({'element':institution.to_json_min()})
-        return jsonify({"form_errors": form.errors}), 400
+    return jsonify({'elements': institution.to_json()}),200
 
 
 def calculate_haversine(location1, location2, search_area):

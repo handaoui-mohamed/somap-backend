@@ -28,5 +28,5 @@ for institution in institutions:
         commune=commune,address=institution["adresse"],phone=institution["tel"],\
         fax=institution["fax"],latitude=institution["position"]["lat"],longitude=institution["position"]["lng"],\
         institution_class=InstitutionClass.query.get(int(institution["typeId"])+1),\
-        wilaya=Wilaya.query.get(int(institution["wilayaID"]))))
+        wilaya=Wilaya.query.get(int(institution["wilayaID"])),validated=True))
     db.session.commit()

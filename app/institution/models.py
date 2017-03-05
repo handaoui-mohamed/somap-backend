@@ -54,3 +54,14 @@ class Institution(db.Model):
             'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
             'comments': [element.to_json() for element in self.comments.all()]
         }
+
+    
+    def getWilaya(self):
+        return Wilaya.query.get(self.wilaya_id).wilaya_name
+    
+    def getCommune(self):
+        return Commune.query.get(self.commune_id).name
+
+    def getClass(self):
+        from app.institution_class.models import InstitutionClass
+        return InstitutionClass.query.get(self.class_id).denomination
