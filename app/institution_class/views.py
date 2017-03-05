@@ -13,9 +13,9 @@ def get_intitution_classes():
         data = request.get_json(force=True)
         form = InstitutionClassForm(MultiDict(mapping=data))
         if form.validate():
-            class_denomination = data.get('class_denomination')
+            class_denomination = data.get('denomination')
             icon_url = data.get('icon_url')
-            institution_class=InstitutionClass(class_denomination=class_denomination,icon_url=icon_url)
+            institution_class=InstitutionClass(denomination=denomination,icon_url=icon_url)
             db.session.add(institution_class)
             db.session.commit() 
             return jsonify({'element':institution_class.to_json_min()}),201
@@ -32,7 +32,7 @@ def get_institution_class_by_id(id):
         data = request.get_json(force=True)
         form = InstitutionClassForm(MultiDict(mapping=data))
         if form.updateValidate():
-            institution_class.class_denomination=data.get('class_denomination')
+            institution_class.denomination=data.get('denomination')
             institution_class.icon_url=data.get('icon_url')
             db.session.add(institution_class)
             db.session.commit() 

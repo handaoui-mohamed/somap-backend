@@ -1,5 +1,6 @@
 from app import db, app
 from app.wilaya.models import Wilaya
+from app.commune.models import Commune
 from app.institution_class.models import InstitutionClass
 from app.institution.models import Institution
 from app.institution.forms import InstitutionForm
@@ -19,14 +20,14 @@ def add_get_institutions():
         if form.validate():
             denomination = data.get('denomination').lower()
             description = data.get('description').lower()
-            commune = data.get('commune').lower()
             address = data.get('address').lower()
             phone = data.get('phone')
             fax = data.get('fax')
             latitude = data.get('latitude')
             longitude = data.get('longitude')
             wilaya = Wilaya.query.get(data.get('wilaya_id'))
-            institution_class = InstitutionClass.query.get(data.get('institution_class_id'))
+            commune = Commune.query.get(data.get('commune_id'))
+            institution_class = InstitutionClass.query.get(data.get('class_id'))
             institution=Institution(denomination=denomination,description=description,\
             commune=commune,address=address,phone=phone,fax=fax,latitude=latitude,\
             longitude=longitude,wilaya=wilaya,institution_class=institution_class)
@@ -52,14 +53,14 @@ def modify_institution(id):
         if form.validate():
             institution.denomination = data.get('denomination').lower()
             institution.description = data.get('description',institution.description).lower()
-            institution.commune = data.get('commune').lower()
             institution.address = data.get('address').lower()
             institution.phone = data.get('phone',institution.phone)
             institution.fax = data.get('fax',institution.fax)
             institution.latitude = data.get('latitude')
             institution.longitude = data.get('longitude')
             institution.wilaya = Wilaya.query.get(data.get('wilaya_id'))
-            institution.institution_class = InstitutionClass.query.get(data.get('institution_class_id'))
+            institution.commune = Commune.query.get(data.get('commune_id'))
+            institution.institution_class = InstitutionClass.query.get(data.get('class_id'))
             db.session.add(institution)
             db.session.commit() 
             return jsonify({'element':institution.to_json_min()})

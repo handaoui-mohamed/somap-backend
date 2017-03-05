@@ -20,6 +20,6 @@ class CommentForm(FlaskForm):
 
         wilaya = Wilaya.query.get(self.wilaya_id.data)
         if wilaya is None:
-            self.wilaya_id.errors.append("L\'identifiant de la wilaya n\'éxiste pas")
+            self.wilaya_id.errors.append("La wilaya n\'éxiste pas")
             return False
         return True

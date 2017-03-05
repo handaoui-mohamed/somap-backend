@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length, NumberRange
 from app.institution.models import Institution
 from app.institution_class.models import InstitutionClass
 from app.wilaya.models import Wilaya
+from app.commune.models import Commune
 
 class InstitutionForm(FlaskForm):
     denomination = StringField('denomination',validators=[
@@ -13,10 +14,6 @@ class InstitutionForm(FlaskForm):
     ])
     description = StringField('description',validators=[
         Length(max=500, message="La description doit être < 500 caractères")
-    ])
-    commune = StringField('commune',validators=[
-        DataRequired('La commune est nécessaire'),
-        Length(min=1, max=50, message="La commune doit être < 50 caractères")
     ])
     address = StringField('address',validators=[
         DataRequired('L\'adresse est nécessaire'),
@@ -28,17 +25,20 @@ class InstitutionForm(FlaskForm):
     fax = StringField('fax',validators=[
         Length(max=30, message="La numéro du Fax doit être < 30 caractères")
     ])
-    institution_class_id=IntegerField('rating', validators=[
-        DataRequired('L\'identifiant de la classe d\'instiution est nécessaire')
+    class_id=IntegerField('class_id', validators=[
+        DataRequired('Le type d\'institution est nécessaire')
     ])
-    wilaya_id=IntegerField('rating', validators=[
-        DataRequired('L\'identifiant de la wilaya est nécessaire')
+    wilaya_id=IntegerField('wilaya_id', validators=[
+        DataRequired('La wilaya est nécessaire')
+    ])
+    commune_id=IntegerField('commune_id', validators=[
+        DataRequired('La commune est nécessaire')
     ])
     longitude=FloatField('longitude', validators=[
-        DataRequired('Longitude de l\'institution est nécessaire')
+        DataRequired('Longitude est nécessaire')
     ])
     latitude=FloatField('latitude', validators=[
-        DataRequired('L\'atitude de l\'institution est nécessaire')
+        DataRequired('Latitude est nécessaire')
     ])
 
 
@@ -46,12 +46,17 @@ class InstitutionForm(FlaskForm):
         if not FlaskForm.validate(self):
             return False
 
-        institution_class = InstitutionClass.query.get(self.institution_class_id.data)
+        institution_class = InstitutionClass.query.get(self.class_id.data)
         if institution_class is None:
-            self.institution_class_id.errors.append('L\'identifiant de la classe d\'instiution est nécessaire')
+            self.class_id.errors.append('Le type d\'institution n\'existe pas!')
             return False
         wilaya = Wilaya.query.get(self.wilaya_id.data)
         if wilaya is None:
-            self.wilaya_id.errors.append('L\'identifiant de la wilaya est nécessaire')
+            self.wilaya_id.errors.append('La wilaya n\'existe pas!')
+            return False
+
+        commune = Commune.query.get(self.commune_id.data)
+        if commune is None or commune.wilaya_id is not wilaya.id:
+            self.commune_id.errors.append('La commune n\'existe pas!')
             return False
         return True

@@ -13,7 +13,7 @@ with open("institutionsClasses.json", "r") as institution_classes_json:
     institution_classes = json.load(institution_classes_json)
 
 for institution_class in institution_classes:
-    db.session.add(InstitutionClass(class_denomination=institution_class["classeDenomination"].lower(),icon_url=institution_class["iconUrl"].lower()))
+    db.session.add(InstitutionClass(denomination=institution_class["classeDenomination"].lower(),icon_url=institution_class["iconUrl"].lower()))
     db.session.commit()
 
 

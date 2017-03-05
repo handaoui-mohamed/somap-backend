@@ -16,6 +16,5 @@ class Wilaya(db.Model):
         return{
             'id': self.id,
             'name': self.wilaya_name,
-            # 'institutions': [element.to_json_min() for element in self.institutions.all()]
             'communes': [element.to_json_min() for element in self.communes.all()]
         }

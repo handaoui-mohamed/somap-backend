@@ -12,9 +12,10 @@ class Institution(db.Model):
     longitude=db.Column(db.Float)
     latitude = db.Column(db.Float)
     comments = db.relationship('Comment', backref='institution', lazy='dynamic')
-    institution_class_id = db.Column(db.Integer, db.ForeignKey('institution_class.id'))
+    class_id = db.Column(db.Integer, db.ForeignKey('institution_class.id'))
     wilaya_id = db.Column(db.Integer, db.ForeignKey('wilaya.id'))
     commune_id = db.Column(db.Integer, db.ForeignKey('commune.id'))
+    validated = db.Column(db.Boolean, default=False)
     # add user_id for the one who added this
 
     def to_json_min(self):
@@ -30,8 +31,8 @@ class Institution(db.Model):
                 'lat': self.latitude,
                 'lng': self.longitude
             },
-            'typeId': self.institution_class_id,
-            'wilayaId': self.wilaya_id,
+            'class_id': self.class_id,
+            'wilaya_id': self.wilaya_id,
             'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
         }
 
@@ -48,8 +49,8 @@ class Institution(db.Model):
                 'lat': self.latitude,
                 'lng': self.longitude
             },
-            'typeId': self.institution_class_id,
-            'wilayaId': self.wilaya_id,
+            'class_id': self.class_id,
+            'wilaya_id': self.wilaya_id,
             'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
             'comments': [element.to_json() for element in self.comments.all()]
         }
