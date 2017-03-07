@@ -41,7 +41,7 @@ def get_institution(id):
     institution = Institution.query.get(id)
     if not institution or not institution.validated:
             abort(404)
-    return jsonify({'elements': institution.to_json()}),200
+    return jsonify({'element': institution.to_json()}),200
 
 
 def calculate_haversine(location1, location2, search_area):
