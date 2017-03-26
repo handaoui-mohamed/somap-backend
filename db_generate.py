@@ -6,6 +6,7 @@ from app.wilaya.models import Wilaya
 from app.commune.models import Commune
 import json
 
+db.drop_all()
 db.create_all()
 
 # creation of all wilayas from wilaya.json
