@@ -10,7 +10,7 @@ db.drop_all()
 db.create_all()
 
 # creation of all wilayas from wilaya.json
-with open("wilaya.json", "r") as wilaya_json:
+with open("wilayas.json", "r") as wilaya_json:
     wilayas = json.load(wilaya_json)
 
 for wilaya in wilayas:
@@ -29,7 +29,7 @@ for commune in communes:
 #create admin user for instituion initial creation
 
 # creation of insititution classes
-with open("InstitutionsClasses.json", "r") as institution_classes_json:
+with open("institutionclasses.json", "r") as institution_classes_json:
     institution_classes = json.load(institution_classes_json)
 
 for institution_class in institution_classes:
