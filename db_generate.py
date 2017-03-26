@@ -29,7 +29,7 @@ for commune in communes:
 #create admin user for instituion initial creation
 
 # creation of insititution classes
-with open("institutionsClasses.json", "r") as institution_classes_json:
+with open("InstitutionsClasses.json", "r") as institution_classes_json:
     institution_classes = json.load(institution_classes_json)
 
 for institution_class in institution_classes:
