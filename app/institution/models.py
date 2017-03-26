@@ -4,11 +4,11 @@ from app.wilaya.models import Wilaya
 
 class Institution(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    denomination = db.Column(db.String(200))
-    description = db.Column(db.String(500))
-    address = db.Column(db.String(200))
-    phone = db.Column(db.String(30))
-    fax = db.Column(db.String(30))
+    denomination = db.Column(db.String)
+    description = db.Column(db.String)
+    address = db.Column(db.String)
+    phone = db.Column(db.String)
+    fax = db.Column(db.String)
     longitude=db.Column(db.Float)
     latitude = db.Column(db.Float)
     comments = db.relationship('Comment', backref='institution', lazy='dynamic')

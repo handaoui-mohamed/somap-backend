@@ -2,7 +2,7 @@ from app import db
 
 class Wilaya(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    wilaya_name = db.Column(db.String(32), unique=True)
+    wilaya_name = db.Column(db.String, unique=True)
     institutions = db.relationship('Institution', backref='wilaya', lazy='dynamic')
     communes = db.relationship('Commune', backref='wilaya', lazy='dynamic')
 

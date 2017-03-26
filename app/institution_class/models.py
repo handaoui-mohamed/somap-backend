@@ -2,7 +2,7 @@ from app import db
 
 class InstitutionClass(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    denomination = db.Column(db.String(200), unique=True)
+    denomination = db.Column(db.String, unique=True)
     icon_url = db.Column(db.String)
     institutions = db.relationship('Institution', backref='institution_class', lazy='dynamic')
 
