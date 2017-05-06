@@ -53,7 +53,7 @@ def institution():
     institutions = Institution.query.filter_by(validated=False).all()
     return render_template('institution.html',title='Validation des Institutions',institutions=institutions)
 
-@app.route('/institution/<int:id>')
+@app.route('/institution/<int:id>/validate')
 @login_required
 def validate_institution(id):
     institution = Institution.query.get(id)
@@ -63,7 +63,7 @@ def validate_institution(id):
     flash("L\'institution a été valider avec succée")
     return redirect(url_for('institution'))
 
-@app.route('/institution/<int:id>')
+@app.route('/institution/<int:id>/delete')
 @login_required
 def delete_institution(id):
     institution = Institution.query.get(id)

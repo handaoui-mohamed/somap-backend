@@ -12,12 +12,9 @@ def add_comment():
     data = request.get_json(force=True)
     form = CommentForm(MultiDict(mapping=data))
     if form.validate():
-        comment_content = data.get('comment_content')
-        rating = data.get('rating')
-        user = User.query.get(data.get('user_id'))
+        content = data.get('content')
         institution = Institution.query.get(data.get('institution_id'))
-        comment=Comment(comment_content=comment_content,rating=rating,\
-        timestamp=datetime.datetime.utcnow(),user=user,institution=institution)
+        comment=Comment(content=content,timestamp=datetime.datetime.utcnow(),institution=institution)
         db.session.add(comment)
         db.session.commit() 
         return jsonify({'element':comment.to_json()}),201
@@ -36,8 +33,7 @@ def modify_comment(id):
         data = request.get_json(force=True)
         form = CommentForm(MultiDict(mapping=data))
         if form.validate():
-            comment.comment_content = data.get('comment_content')
-            comment.rating = data.get('rating')
+            comment.comment_content = data.get('content')
             comment.timestamp=datetime.datetime.utcnow()
             db.session.add(comment)
             db.session.commit() 

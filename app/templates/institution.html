@@ -18,6 +18,7 @@
                     <th>Téléphone</th>
                     <th>Fax</th>
                     <th>Description</th>
+                    <th>Postion Map</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -33,6 +34,7 @@
                     <td>{{ institution.phone }}</td>
                     <td>{{ institution.fax }}</td>
                     <td>{{ institution.description }}</td>
+                    <td><a href="{{ 'https://www.google.dz/maps/@'+institution.latitude|string+','+institution.longitude|string+',15z' }}" target="_blank">postion</a></td>
                     <td>
                         <a class="btn btn-success" href="{{ url_for('validate_institution', id=institution.id) }}">
                             Valider

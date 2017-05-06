@@ -15,6 +15,7 @@ class Institution(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('institution_class.id'))
     wilaya_id = db.Column(db.Integer, db.ForeignKey('wilaya.id'))
     commune_id = db.Column(db.Integer, db.ForeignKey('commune.id'))
+    picture = db.relationship('InstitutionPicture', backref='institution', uselist=False)
     validated = db.Column(db.Boolean, default=False)
     # add user_id for the one who added this
 
@@ -33,7 +34,7 @@ class Institution(db.Model):
             },
             'class_id': self.class_id,
             'wilaya_id': self.wilaya_id,
-            'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
+            'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name
         }
 
     def to_json(self):
@@ -52,7 +53,8 @@ class Institution(db.Model):
             'class_id': self.class_id,
             'wilaya_id': self.wilaya_id,
             'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
-            'comments': [element.to_json() for element in self.comments.all()]
+            'comments': [element.to_json() for element in self.comments.all()],
+            'picture': self.picture.to_json() if self.picture else None
         }
 
     

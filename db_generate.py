@@ -50,3 +50,8 @@ for institution in institutions:
         institution_class=InstitutionClass.query.get(int(institution["typeId"])+1),\
         wilaya=Wilaya.query.get(int(institution["wilayaID"])),validated=True))
     db.session.commit()
+
+user = User(username="unicef", email="unicef@unicef.com",full_name="UNICEF Innovation lab")
+user.hash_password("unicefInnovationLab@2017")
+db.session.add(user)
+db.session.commit()

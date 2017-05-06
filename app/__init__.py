@@ -26,6 +26,7 @@ from app.contact import views
 from app.comment import views
 from app.commune import views
 from app.moderator import views
+from app.upload import views
 
 # import models
 from app.user.models import User
@@ -34,3 +35,4 @@ from app.institution_class.models import InstitutionClass
 from app.wilaya.models import Wilaya
 from app.comment.models import Comment
 from app.commune.models import Commune
+from app.upload.models import InstitutionPicture

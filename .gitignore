@@ -5,3 +5,4 @@ db_repository
 flask
 tmp
 .idea
+uploads
