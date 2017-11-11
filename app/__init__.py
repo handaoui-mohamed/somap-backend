@@ -25,8 +25,8 @@ from app.wilaya import views
 from app.contact import views
 from app.comment import views
 from app.commune import views
-from app.moderator import views
 from app.upload import views
+from app.moderator import views
 
 # import models
 from app.user.models import User

@@ -14,13 +14,16 @@ lm.init_app(app)
 lm.login_view = 'index'
 lm.login_message = 'Veuillez vous connecter pour acceder a cette page.'
 
+
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
+
 @app.before_request
 def before_request():
     g.user = current_user
+
 
 @app.errorhandler(404)
 def not_found_error(error):
@@ -32,9 +35,10 @@ def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
-@app.route('/login', methods=['GET', 'POST'])
+
+@app.route('/admin/', methods=['GET', 'POST'])
+@app.route('/admin/index', methods=['GET', 'POST'])
+@app.route('/admin/login', methods=['GET', 'POST'])
 def index():
     if g.user is not None and g.user.is_authenticated:
         return redirect(url_for('institution'))
@@ -44,16 +48,17 @@ def index():
         login_user(user, remember=form.remember_me.data)
         return redirect(request.args.get('next') or url_for('institution'))
     flash("Nom d\'utilisateur ou mot de passe érroné")
-    return render_template('index.html',title='Connexion',form=form)
+    return render_template('index.html', title='Connexion', form=form)
 
 
-@app.route('/institution')
+@app.route('/admin/institution')
 @login_required
 def institution():
     institutions = Institution.query.filter_by(validated=False).all()
-    return render_template('institution.html',title='Validation des Institutions',institutions=institutions)
+    return render_template('institution.html', title='Validation des Institutions', institutions=institutions)
 
-@app.route('/institution/<int:id>/validate')
+
+@app.route('/admin/institution/<int:id>/validate')
 @login_required
 def validate_institution(id):
     institution = Institution.query.get(id)
@@ -63,7 +68,8 @@ def validate_institution(id):
     flash("L\'institution a été valider avec succée")
     return redirect(url_for('institution'))
 
-@app.route('/institution/<int:id>/delete')
+
+@app.route('/admin/institution/<int:id>/delete')
 @login_required
 def delete_institution(id):
     institution = Institution.query.get(id)
@@ -73,8 +79,18 @@ def delete_institution(id):
     return redirect(url_for('institution'))
 
 
-@app.route('/logout')
+@app.route('/admin/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/<path:path>')
+def static_file(path):
+    return app.send_static_file(path)
+
+
+@app.errorhandler(404)
+def client(e):
+    return app.send_static_file("index.html")
