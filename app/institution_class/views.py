@@ -5,7 +5,7 @@ from werkzeug.datastructures import MultiDict
 from flask import abort, request, jsonify
 
 
-@app.route('/api/institution_classes', methods=["GET"])
+@app.route('/api/institution_classes')
 def query():
     institution_classes = InstitutionClass.query.all()
     return jsonify({'elements': [element.to_json_min() for element in institution_classes]})
@@ -26,7 +26,7 @@ def post():
     return jsonify({"form_errors": form.errors}), 400
 
 
-@app.route('/api/institution_classes/<int:id>', methods=["GET"])
+@app.route('/api/institution_classes/<int:id>')
 def get(id):
     institution_class = InstitutionClass.query.get(id)
     if not institution_class:

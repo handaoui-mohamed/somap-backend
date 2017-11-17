@@ -11,7 +11,8 @@ from app.institution.models import Institution
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-@app.route('/api/uploads/<int:institution_id>',methods=['POST'])
+
+@app.route('/api/uploads/<int:institution_id>', methods=['POST'])
 def uploadPicture(institution_id):
     institution = Institution.query.get(institution_id)
     if not institution_id or not institution:
@@ -19,21 +20,26 @@ def uploadPicture(institution_id):
     file = request.files.get("file")
     if not file:
         abort(400)
-    filename = uploadFile(file, os.path.join(basedir, UPLOAD_FOLDER, str(institution.id)), institution)
-    uploaded_picture = InstitutionPicture(name=filename,institution=institution)
+    filename = uploadFile(file, os.path.join(
+        basedir, UPLOAD_FOLDER, str(institution.id)), institution)
+    uploaded_picture = InstitutionPicture(
+        name=filename, institution=institution)
     db.session.add(uploaded_picture)
     db.session.commit()
-    return jsonify({'element':institution.to_json()}),201
+    return jsonify({'element': institution.to_json()}), 201
 
-@app.route('/api/uploads/<int:institution_id>',methods=['GET'])
+
+@app.route('/api/uploads/<int:institution_id>', methods=['GET'])
 def getPicture(institution_id):
-	institution = Institution.query.get(institution_id)
-	if not institution_id or not institution or not institution.picture:
-		abort(400)
-	directory = os.path.join(basedir, UPLOAD_FOLDER, str(institution.id))
-	return send_from_directory(directory, institution.picture.name)
+    institution = Institution.query.get(institution_id)
+    if not institution_id or not institution or not institution.picture:
+        abort(400)
+    directory = os.path.join(basedir, UPLOAD_FOLDER, str(institution.id))
+    return send_from_directory(directory, institution.picture.name)
 
 # upload files function
+
+
 def uploadFile(file, path, owner):
     if not file or not allowed_file(file.filename):
         abort(400)
