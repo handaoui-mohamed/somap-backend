@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app=somap>
+
+<head>
+	<base href=/>
+	<meta http-equiv=content-type content="text/html; charset=UTF-8">
+	<meta charset=utf-8>
+	<title>SoMap</title>
+	<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel=stylesheet href=styles/vendor-f57d4762c0.css>
+	<link rel=stylesheet href=styles/app-548e89208f.css>
+</head>
+<!--[if lt IE 10]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<body ng-controller="IndexController as vm" id=toastBounds>
+	<div ui-view layout-fill></div>
+	<!-- Google Maps -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMr1AqHgnQIbyTJtgTDUK_1ECjmgdnNDU&output=embed"></script>
+	<!-- scripts -->
+	<script src=scripts/vendor-d424340bf7.js></script>
+	<script src=scripts/app-59fff2dc6c.js></script>
+</body>
+
+</html>
