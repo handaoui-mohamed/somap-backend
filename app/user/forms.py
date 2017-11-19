@@ -21,7 +21,7 @@ class RegistrationForm(FlaskForm):
     ])
     
     password = PasswordField('password', validators=[
-        Length(min=8, message="Le nom mot de passe doit être > 8 caractères"),
+        Length(min=4, message="Le nom mot de passe doit être >= 4 caractères"),
         DataRequired('Le mot de passe est nécessaire')
     ])
 
@@ -53,7 +53,7 @@ class LoginForm(FlaskForm):
         Length(min=1, max=32, message="Le nom d\'utilisateur doit être > 1 et < 32 caractères")
     ])
     password = PasswordField('password', validators=[
-        Length(min=8, message="Le nom mot de passe doit être > 8 caractères"),
+        Length(min=4, message="Le nom mot de passe doit être >= 4 caractères"),
         DataRequired('Le mot de passe est nécessaire')
     ])
 
