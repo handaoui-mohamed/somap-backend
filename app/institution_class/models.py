@@ -9,12 +9,12 @@ class InstitutionClass(db.Model):
     def to_json_min(self):
         return{
             'id': self.id,
-            'denomination': self.denomination
+            'name': self.denomination
         }
 
     def to_json(self):
         return{
             'id': self.id,
-            'denomination': self.denomination,
+            'name': self.denomination,
             'institutions': [element.to_json_min() for element in self.institutions.all()]
         }

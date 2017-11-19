@@ -16,17 +16,16 @@ class Institution(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('institution_class.id'))
     wilaya_id = db.Column(db.Integer, db.ForeignKey('wilaya.id'))
     commune_id = db.Column(db.Integer, db.ForeignKey('commune.id'))
-    picture = db.relationship('InstitutionPicture',
-                              backref='institution', uselist=False)
+    picture = db.relationship('InstitutionPicture', backref='institution', uselist=False)
     validated = db.Column(db.Boolean, default=False)
     # add user_id for the one who added this
 
     def to_json_min(self):
         return{
             'id': self.id,
-            'denomination': self.denomination,
+            'name': self.denomination,
             'description': self.description,
-            'commune': Commune.query.get(self.commune_id).to_json_min(),
+            'commune': Commune.query.get(self.commune_id).name,
             'address': self.address,
             'phone': self.phone,
             'fax': self.fax,
@@ -36,15 +35,17 @@ class Institution(db.Model):
             },
             'class_id': self.class_id,
             'wilaya_id': self.wilaya_id,
-            'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name
+            'class': InstitutionClass.query.get(self.class_id).denomination,
+            'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
+			'validated': self.validated
         }
 
     def to_json(self):
         return{
             'id': self.id,
-            'denomination': self.denomination,
+            'name': self.denomination,
             'description': self.description,
-            'commune': Commune.query.get(self.commune_id).to_json_min(),
+            'commune': Commune.query.get(self.commune_id).name,
             'address': self.address,
             'phone': self.phone,
             'fax': self.fax,
@@ -54,8 +55,10 @@ class Institution(db.Model):
             },
             'class_id': self.class_id,
             'wilaya_id': self.wilaya_id,
+            'class': InstitutionClass.query.get(self.class_id).denomination,
             'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
-            'picture': self.picture.to_json() if self.picture else None
+            'picture': self.picture.to_json() if self.picture else None,
+			'validated': self.validated
         }
 
     def getWilaya(self):
