@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from app import db, app
-from app.comment.models import Comment
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 from config import SECRET_KEY
@@ -22,24 +21,6 @@ class User(db.Model):
         s = Serializer(SECRET_KEY, expires_in=expiration)
         return s.dumps({'id': self.id})
 
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_active(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        try:
-            return unicode(self.id)  # python 2
-        except NameError:
-            return str(self.id)  # python 3
-
     @staticmethod
     def verify_auth_token(token):
         s = Serializer(SECRET_KEY)
@@ -51,22 +32,13 @@ class User(db.Model):
             return None    # invalid token
         user = User.query.get(data['id'])
         return user
-
-    def to_json_min(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'full_name': self.full_name,
-            'email': self.email,
-        }
     
     def to_json(self):
         return {
             'id': self.id,
             'username': self.username,
             'full_name': self.full_name,
-            'email': self.email,
-            'comments': [element.to_json_min() for element in self.comments.all()]
+            'email': self.email
         }
 
     def __repr__(self):

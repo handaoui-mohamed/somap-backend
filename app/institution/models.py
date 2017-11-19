@@ -13,7 +13,6 @@ class Institution(db.Model):
     fax = db.Column(db.String)
     longitude = db.Column(db.Float)
     latitude = db.Column(db.Float)
-    comments = db.relationship('Comment', backref='institution', lazy='dynamic')
     class_id = db.Column(db.Integer, db.ForeignKey('institution_class.id'))
     wilaya_id = db.Column(db.Integer, db.ForeignKey('wilaya.id'))
     commune_id = db.Column(db.Integer, db.ForeignKey('commune.id'))
@@ -56,7 +55,6 @@ class Institution(db.Model):
             'class_id': self.class_id,
             'wilaya_id': self.wilaya_id,
             'wilaya': Wilaya.query.get(self.wilaya_id).wilaya_name,
-            'comments': [element.to_json() for element in self.comments.all()],
             'picture': self.picture.to_json() if self.picture else None
         }
 

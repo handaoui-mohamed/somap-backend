@@ -56,7 +56,6 @@ class LoginForm(FlaskForm):
         Length(min=8, message="Le nom mot de passe doit être > 8 caractères"),
         DataRequired('Le mot de passe est nécessaire')
     ])
-    remember_me = BooleanField('remember_me', default=False)
 
     def validate(self):
         if not FlaskForm.validate(self):
