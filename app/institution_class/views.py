@@ -17,9 +17,7 @@ def post():
     form = InstitutionClassForm(MultiDict(mapping=data))
     if form.validate():
         class_denomination = data.get('denomination')
-        icon_url = data.get('icon_url')
-        institution_class = InstitutionClass(
-            denomination=denomination, icon_url=icon_url)
+        institution_class = InstitutionClass(denomination=denomination)
         db.session.add(institution_class)
         db.session.commit()
         return jsonify({'element': institution_class.to_json_min()}), 201
@@ -31,7 +29,7 @@ def get(id):
     institution_class = InstitutionClass.query.get(id)
     if not institution_class:
         abort(404)
-        return jsonify({'element': institution_class.to_json()})
+	return jsonify({'element': institution_class.to_json()})
 
 
 @app.route('/api/institution_classes/<int:id>', methods=["PUT"])
@@ -47,7 +45,7 @@ def put(id):
             db.session.add(institution_class)
             db.session.commit()
             return jsonify({'element': institution_class.to_json()})
-        return jsonify({"form_errors": form.errors}), 400
+	return jsonify({"form_errors": form.errors}), 400
 
 
 @app.route('/api/institution_classes/<int:id>', methods=["DELETE"])

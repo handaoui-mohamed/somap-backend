@@ -1,27 +1,22 @@
 [
 	{
 		"id": 0,
-		"classeDenomination": "Etablissement pour enfants handicapés",
-		"iconUrl": "assets/images/blue-dot.png"
+		"classeDenomination": "Etablissement pour enfants handicapés"
 	},
 	{
 		"id": 1,
-		"classeDenomination": "Etablissement pour enfants privés de famille",
-		"iconUrl": "assets/images/red-dot.png"
+		"classeDenomination": "Etablissement pour enfants privés de famille"
 	},
 	{
 		"id": 2,
-		"classeDenomination": "Centre spécialisé de réeducation",
-		"iconUrl": "assets/images/green-dot.png"
+		"classeDenomination": "Centre spécialisé de réeducation"
 	},
 	{
 		"id": 3,
-		"classeDenomination": "Centre spécialisé de protection",
-		"iconUrl": "assets/images/yellow-dot.png"
+		"classeDenomination": "Centre spécialisé de protection"
 	},
 	{
 		"id": 4,
-		"classeDenomination": "Centre polyvalent de sauvegarde de la jeunesse",
-		"iconUrl": "assets/images/purple-dot.png"
+		"classeDenomination": "Centre polyvalent de sauvegarde de la jeunesse"
 	}
 ]
