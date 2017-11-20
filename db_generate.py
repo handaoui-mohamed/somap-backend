@@ -31,7 +31,7 @@ if args.wilayas or args.all:
 		wilayas = json.load(wilaya_json)
 
 	for wilaya in wilayas:
-		db.session.add(Wilaya(wilaya_name=wilaya["wilaya"].lower()))
+		db.session.add(Wilaya(name=wilaya["wilaya"].lower()))
 	db.session.commit()
 	# creation of all communes from communes.json
 	with open("data/communes.json", "r") as communes_json:
@@ -49,7 +49,7 @@ if args.classes or args.all:
 		institution_classes = json.load(institution_classes_json)
 
 	for institution_class in institution_classes:
-		db.session.add(InstitutionClass(denomination=institution_class["classeDenomination"].lower()))
+		db.session.add(InstitutionClass(name=institution_class["classeDenomination"].lower()))
 	db.session.commit()
 
 if args.institutions or args.all:
@@ -60,7 +60,7 @@ if args.institutions or args.all:
 	for institution in institutions:
 		commune = Commune.query.filter_by(name=institution["commune"].lower(), wilaya_id=institution["wilayaID"]).first()
 		db.session.add(Institution(
-			denomination=institution["denomination"].lower(), 
+			name=institution["denomination"].lower(), 
 			description=institution["description"].lower(),
 			commune=commune, 
 			address=institution["adresse"], 

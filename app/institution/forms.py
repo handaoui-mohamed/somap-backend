@@ -8,9 +8,9 @@ from app.wilaya.models import Wilaya
 from app.commune.models import Commune
 
 class InstitutionForm(FlaskForm):
-    denomination = StringField('denomination',validators=[
+    name = StringField('name',validators=[
         DataRequired('La denomenation de l\'institution est nécessaire'),
-        Length(min=1, max=200, message="La denomination doit être < 200 caractères")
+        Length(min=1, max=200, message="La name doit être < 200 caractères")
     ])
     description = StringField('description',validators=[
         Length(max=500, message="La description doit être < 500 caractères")
