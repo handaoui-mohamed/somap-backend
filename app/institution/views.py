@@ -29,3 +29,17 @@ def get_institution(id):
     if not institution or not institution.validated:
         abort(404)
     return jsonify({'element': institution.to_json()}), 200
+
+@app.route('/api/institutions/<int:id>', methods=["PUT"])
+def update_institution(id):
+	institution = Institution.query.get(id)
+	if not institution:
+		abort(404)
+	data = request.get_json(force=True)
+	form = InstitutionForm(MultiDict(mapping=data))
+	if form.validate():
+		institution.update(data)
+		db.session.add(institution)
+		db.session.commit()
+		return jsonify({'element': institution.to_json_min()}), 201
+	return jsonify({"form_errors": form.errors}), 400

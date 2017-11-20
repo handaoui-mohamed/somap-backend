@@ -5,83 +5,99 @@ from app.institution_class.models import InstitutionClass
 
 
 class Institution(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    description = db.Column(db.String)
-    address = db.Column(db.String)
-    phone = db.Column(db.String)
-    fax = db.Column(db.String)
-    longitude = db.Column(db.Float)
-    latitude = db.Column(db.Float)
-    class_id = db.Column(db.Integer, db.ForeignKey('institution_class.id'))
-    wilaya_id = db.Column(db.Integer, db.ForeignKey('wilaya.id'))
-    commune_id = db.Column(db.Integer, db.ForeignKey('commune.id'))
-    picture = db.relationship('InstitutionPicture', backref='institution', uselist=False)
-    validated = db.Column(db.Boolean, default=False)
-    # add user_id for the one who added this
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String)
+	description = db.Column(db.String)
+	address = db.Column(db.String)
+	phone = db.Column(db.String)
+	fax = db.Column(db.String)
+	longitude = db.Column(db.Float)
+	latitude = db.Column(db.Float)
+	class_id = db.Column(db.Integer, db.ForeignKey('institution_class.id'))
+	wilaya_id = db.Column(db.Integer, db.ForeignKey('wilaya.id'))
+	commune_id = db.Column(db.Integer, db.ForeignKey('commune.id'))
+	picture = db.relationship('InstitutionPicture', backref='institution', uselist=False)
+	validated = db.Column(db.Boolean, default=False)
+	# add user_id for the one who added this
 
-    def to_json_min(self):
-        return{
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'commune': Commune.query.get(self.commune_id).name,
-            'address': self.address,
-            'phone': self.phone,
-            'fax': self.fax,
-            'position': {
-                'lat': self.latitude,
-                'lng': self.longitude
-            },
-            'class_id': self.class_id,
-            'wilaya_id': self.wilaya_id,
-            'class': InstitutionClass.query.get(self.class_id).name,
-            'wilaya': Wilaya.query.get(self.wilaya_id).name,
+	def to_json_min(self):
+		return{
+			'id': self.id,
+			'name': self.name,
+			'description': self.description,
+			'commune': Commune.query.get(self.commune_id).name,
+			'commune_id': self.commune_id,
+			'address': self.address,
+			'phone': self.phone,
+			'fax': self.fax,
+			'position': {
+				'lat': self.latitude,
+				'lng': self.longitude
+			},
+			'class_id': self.class_id,
+			'wilaya_id': self.wilaya_id,
+			'class': InstitutionClass.query.get(self.class_id).name,
+			'wilaya': Wilaya.query.get(self.wilaya_id).name,
 			'validated': self.validated
-        }
+		}
 
-    def to_json(self):
-        return{
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'commune': Commune.query.get(self.commune_id).name,
-            'address': self.address,
-            'phone': self.phone,
-            'fax': self.fax,
-            'position': {
-                'lat': self.latitude,
-                'lng': self.longitude
-            },
-            'class_id': self.class_id,
-            'wilaya_id': self.wilaya_id,
-            'class': InstitutionClass.query.get(self.class_id).name,
-            'wilaya': Wilaya.query.get(self.wilaya_id).name,
-            'picture': self.picture.to_json() if self.picture else None,
+	def to_json(self):
+		return{
+			'id': self.id,
+			'name': self.name,
+			'description': self.description,
+			'commune': Commune.query.get(self.commune_id).name,
+			'commune_id': self.commune_id,
+			'address': self.address,
+			'phone': self.phone,
+			'fax': self.fax,
+			'position': {
+				'lat': self.latitude,
+				'lng': self.longitude
+			},
+			'class_id': self.class_id,
+			'wilaya_id': self.wilaya_id,
+			'class': InstitutionClass.query.get(self.class_id).name,
+			'wilaya': Wilaya.query.get(self.wilaya_id).name,
+			'picture': self.picture.to_json() if self.picture else None,
 			'validated': self.validated
-        }
+		}
 
-    def getWilaya(self):
-        return Wilaya.query.get(self.wilaya_id).name
+	def update(self, data):
+		self.name = data.get('name').lower()
+		self.description = data.get('description').lower()
+		self.address = data.get('address').lower()
+		self.phone = data.get('phone')
+		self.fax = data.get('fax')
+		self.latitude = data.get('latitude')
+		self.longitude = data.get('longitude')
+		self.wilaya = Wilaya.query.get(data.get('wilaya_id'))
+		self.commune = Commune.query.get(data.get('commune_id'))
+		self.institution_class = InstitutionClass.query.get(data.get('class_id'))
+		self.validated = data.get('validated', False)
 
-    def getCommune(self):
-        return Commune.query.get(self.commune_id).name
+	def getWilaya(self):
+		return Wilaya.query.get(self.wilaya_id).name
 
-    def getClass(self):
-        from app.institution_class.models import InstitutionClass
-        return InstitutionClass.query.get(self.class_id).name
+	def getCommune(self):
+		return Commune.query.get(self.commune_id).name
 
-        @staticmethod
-        def new(data):
-			name = data.get('name').lower()
-			description = data.get('description').lower()
-			address = data.get('address').lower()
-			phone = data.get('phone')
-			fax = data.get('fax')
-			latitude = data.get('latitude')
-			longitude = data.get('longitude')
-			wilaya = Wilaya.query.get(data.get('wilaya_id'))
-			commune = Commune.query.get(data.get('commune_id'))
-			institution_class = InstitutionClass.query.get(data.get('class_id'))
-			institution = Institution(name=name, description=description, commune=commune, address=address, phone=phone, fax=fax, latitude=latitude, longitude=longitude, wilaya=wilaya, institution_class=institution_class)
-			return institution
+	def getClass(self):
+		from app.institution_class.models import InstitutionClass
+		return InstitutionClass.query.get(self.class_id).name
+
+
+	@staticmethod
+	def new(data):
+		name = data.get('name').lower()
+		description = data.get('description').lower()
+		address = data.get('address').lower()
+		phone = data.get('phone')
+		fax = data.get('fax')
+		latitude = data.get('latitude')
+		longitude = data.get('longitude')
+		wilaya = Wilaya.query.get(data.get('wilaya_id'))
+		commune = Commune.query.get(data.get('commune_id'))
+		institution_class = InstitutionClass.query.get(data.get('class_id'))
+		institution = Institution(name=name, description=description, commune=commune, address=address, phone=phone, fax=fax, latitude=latitude, longitude=longitude, wilaya=wilaya, institution_class=institution_class)
+		return institution
