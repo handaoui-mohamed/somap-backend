@@ -1,6 +1,7 @@
 from app import db, app
 from app.institution.models import Institution
 from app.institution.forms import InstitutionForm
+from app.institution.controller import createInstitution, updateInstitution
 from werkzeug.datastructures import MultiDict
 from flask import abort, request, jsonify
 
@@ -16,7 +17,7 @@ def add_institution():
     data = request.get_json(force=True)
     form = InstitutionForm(MultiDict(mapping=data))
     if form.validate():
-        institution = Institution.new(data)
+        institution = createInstitution(data)
         db.session.add(institution)
         db.session.commit()
         return jsonify({'element': institution.to_json_min()}), 201
@@ -30,16 +31,17 @@ def get_institution(id):
         abort(404)
     return jsonify({'element': institution.to_json()}), 200
 
+
 @app.route('/api/institutions/<int:id>', methods=["PUT"])
 def update_institution(id):
-	institution = Institution.query.get(id)
-	if not institution:
-		abort(404)
-	data = request.get_json(force=True)
-	form = InstitutionForm(MultiDict(mapping=data))
-	if form.validate():
-		institution.update(data)
-		db.session.add(institution)
-		db.session.commit()
-		return jsonify({'element': institution.to_json_min()}), 201
-	return jsonify({"form_errors": form.errors}), 400
+    institution = Institution.query.get(id)
+    if not institution:
+        abort(404)
+    data = request.get_json(force=True)
+    form = InstitutionForm(MultiDict(mapping=data))
+    if form.validate():
+        institution = updateInstitution(institution, data)
+        db.session.add(institution)
+        db.session.commit()
+        return jsonify({'element': institution.to_json_min()}), 201
+    return jsonify({"form_errors": form.errors}), 400
