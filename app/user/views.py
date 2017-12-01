@@ -1,6 +1,6 @@
 from app import db, app
 from app.user.models import User
-from app.user.forms import RegistrationForm, LoginForm
+from app.user.forms import RegistrationForm, UpdateForm, LoginForm
 from app.user.controller import createUser, updateUser
 from flask import abort, request, jsonify
 from werkzeug.datastructures import MultiDict
@@ -48,13 +48,13 @@ def update_user(id):
     if not user:
         abort(404)
     data = request.get_json(force=True)
-    form = RegistrationForm(MultiDict(mapping=data))
-    if form.validate():
-        user = updateUser(user, data)
+    form = UpdateForm(MultiDict(mapping=data))
+    if form.validate(user.id):
+        updateUser(user, data)
         db.session.add(user)
         db.session.commit()
         return jsonify({'element': user.to_json()})
-    return jsonify({'element': user.to_json()})
+    return jsonify({"form_errors": form.errors}), 400
 
 
 @app.route('/api/login', methods=["POST"])

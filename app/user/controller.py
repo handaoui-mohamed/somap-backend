@@ -27,4 +27,3 @@ def updateUser(user, data):
     password = data.get('password')
     if password:
         user.hash_password(password)
-    return user
