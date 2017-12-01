@@ -6,12 +6,9 @@ from app.institution_class.models import InstitutionClass
 
 
 class InstitutionClassForm(FlaskForm):
-    name = StringField('name',validators=[
-        DataRequired('La denomenation de la classe est nécessaire'),
+    name = StringField('name', validators=[
+        DataRequired('La denomenation est nécessaire'),
         Length(min=1, max=200, message="La name doit être > 1 et < 100 caractères")
-    ])
-    icon_url = StringField('icon_url',validators=[
-        DataRequired('L\'url de l\'icon est nécessaire'),
     ])
 
     def validate(self):
@@ -20,10 +17,19 @@ class InstitutionClassForm(FlaskForm):
 
         name = InstitutionClass.query.filter_by(name=self.name.data).first()
         if name is not None:
-            self.name.errors.append("Cette classe exite déja, veuillez choisir une autre!")
+            self.name.errors.append(
+                "Ce type exite déja, veuillez choisir une autre!")
             return False
         return True
-    
-    def updateValidate(self):
-        if FlaskForm.validate(self):
-            return True
+
+    def updateValidate(self, institutionClassId):
+        if not FlaskForm.validate(self):
+            return False
+
+        institutionClass = InstitutionClass.query.filter_by(
+            name=self.name.data).first()
+        if institutionClass is not None and institutionClass.id != institutionClassId:
+            self.name.errors.append(
+                "Ce type exite déja, veuillez choisir une autre!")
+            return False
+        return True

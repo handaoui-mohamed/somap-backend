@@ -1,7 +1,7 @@
 from app import db, app
 from app.user.models import User
 from app.user.forms import RegistrationForm, UpdateForm, LoginForm
-from app.user.controller import createUser, updateUser
+from app.user.controller import createUser, updateUser, checkUserId
 from flask import abort, request, jsonify
 from werkzeug.datastructures import MultiDict
 
@@ -18,25 +18,19 @@ def new_user():
     form = RegistrationForm(MultiDict(mapping=data))
     if form.validate():
         user = createUser(data)
-        db.session.add(user)
-        db.session.commit()
         return jsonify({'element': user.to_json()}), 201
     return jsonify({"form_errors": form.errors}), 400
 
 
 @app.route('/api/users/<int:id>')
 def get_user_by_id(id):
-    user = User.query.get(id)
-    if not user:
-        abort(404)
+    user = checkUserId(id)
     return jsonify({'element': user.to_json()})
 
 
 @app.route('/api/users/<int:id>', methods=["DELETE"])
 def delete_user(id):
-    user = User.query.get(id)
-    if not user:
-        abort(404)
+    user = checkUserId(id)
     db.session.delete(user)
     db.session.commit()
     return jsonify({'success': 'true'}), 200
@@ -44,15 +38,11 @@ def delete_user(id):
 
 @app.route('/api/users/<int:id>', methods=["PUT"])
 def update_user(id):
-    user = User.query.get(id)
-    if not user:
-        abort(404)
+    user = checkUserId(id)
     data = request.get_json(force=True)
     form = UpdateForm(MultiDict(mapping=data))
     if form.validate(user.id):
         updateUser(user, data)
-        db.session.add(user)
-        db.session.commit()
         return jsonify({'element': user.to_json()})
     return jsonify({"form_errors": form.errors}), 400
 

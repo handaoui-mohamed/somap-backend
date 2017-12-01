@@ -1,4 +1,12 @@
+from app import db
 from app.user.models import User
+
+
+def checkUserId(id):
+    user = User.query.get(id)
+    if not user:
+        abort(404)
+    return user
 
 
 def createUser(data):
@@ -13,6 +21,8 @@ def createUser(data):
     user = User(username=username, email=email.lower(), phone=phone,
                 address=address, wilaya_id=wilaya_id)
     user.hash_password(password)
+    db.session.add(user)
+    db.session.commit()
     return user
 
 
@@ -27,3 +37,5 @@ def updateUser(user, data):
     password = data.get('password')
     if password:
         user.hash_password(password)
+        db.session.add(user)
+    db.session.commit()
