@@ -21,5 +21,6 @@ class Wilaya(db.Model):
         return{
             'id': self.id,
             'name': self.name,
+            'code': self.code,
             'communes': [element.to_json_min() for element in self.communes.all()]
         }
