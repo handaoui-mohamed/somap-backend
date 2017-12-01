@@ -2,6 +2,7 @@ from app import db, app
 from app.wilaya.models import Wilaya
 from app.wilaya.forms import WilayaForm
 from app.wilaya.controller import checkWilayaId, createWilaya, updateWilaya
+from app.user.controller import admin_required
 from werkzeug.datastructures import MultiDict
 from flask import request, jsonify
 
@@ -13,6 +14,7 @@ def get_wilayas():
 
 
 @app.route('/api/wilayas', methods=["POST"])
+@admin_required
 def add_wilaya():
     data = request.get_json(force=True)
     form = WilayaForm(MultiDict(mapping=data))
@@ -29,6 +31,7 @@ def get_wilaya_by_id(id):
 
 
 @app.route('/api/wilayas/<int:id>', methods=["PUT"])
+@admin_required
 def update_wilaya(id):
     wilaya = checkWilayaId(id)
     data = request.get_json(force=True)
@@ -40,6 +43,7 @@ def update_wilaya(id):
 
 
 @app.route('/api/wilayas/<int:id>', methods=["DELETE"])
+@admin_required
 def delete_wilaya(id):
     wilaya = checkWilayaId(id)
     db.session.delete(wilaya)

@@ -2,6 +2,7 @@ from app import db, app
 from app.commune.models import Commune
 from app.commune.forms import CommuneForm
 from app.commune.controller import checkCommuneId, createCommune, updateCommune
+from app.user.controller import admin_required
 from werkzeug.datastructures import MultiDict
 from flask import request, jsonify
 
@@ -13,6 +14,7 @@ def get_communes():
 
 
 @app.route('/api/communes', methods=["POST"])
+@admin_required
 def add_commune():
     data = request.get_json(force=True)
     form = CommuneForm(MultiDict(mapping=data))
@@ -29,6 +31,7 @@ def get_commune_by_id(id):
 
 
 @app.route('/api/communes/<int:id>', methods=["PUT"])
+@admin_required
 def update_commune(id):
     commune = checkCommuneId(id)
     data = request.get_json(force=True)
@@ -40,6 +43,7 @@ def update_commune(id):
 
 
 @app.route('/api/communes/<int:id>', methods=["DELETE"])
+@admin_required
 def delete_commune(id):
     commune = checkCommuneId(id)
     db.session.delete(commune)

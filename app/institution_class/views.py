@@ -2,6 +2,7 @@ from app import db, app
 from app.institution_class.models import InstitutionClass
 from app.institution_class.forms import InstitutionClassForm
 from app.institution_class.controller import createInstitutionClass, updateInstitutionClass, checkInstitutionClassId
+from app.user.controller import admin_required
 from werkzeug.datastructures import MultiDict
 from flask import request, jsonify
 
@@ -13,6 +14,7 @@ def query():
 
 
 @app.route('/api/institution_classes', methods=["POST"])
+@admin_required
 def post():
     data = request.get_json(force=True)
     form = InstitutionClassForm(MultiDict(mapping=data))
@@ -29,6 +31,7 @@ def get(id):
 
 
 @app.route('/api/institution_classes/<int:id>', methods=["PUT"])
+@admin_required
 def put(id):
     institutionClass = checkInstitutionClassId(id)
     data = request.get_json(force=True)
@@ -40,6 +43,7 @@ def put(id):
 
 
 @app.route('/api/institution_classes/<int:id>', methods=["DELETE"])
+@admin_required
 def delete(id):
     institutionClass = checkInstitutionClassId(id)
     db.session.delete(institutionClass)

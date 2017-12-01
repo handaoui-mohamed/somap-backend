@@ -35,3 +35,40 @@ def updateUser(user, data):
         user.hash_password(password)
         db.session.add(user)
     db.session.commit()
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not request.headers.get('Authorization'):
+            response = jsonify(message='Missing authorization header')
+            response.status_code = 401
+            return response
+
+        try:
+            payload = parse_token(request)
+        except DecodeError:
+            response = jsonify(message='Token is invalid')
+            response.status_code = 401
+            return response
+        except ExpiredSignature:
+            response = jsonify(message='Token has expired')
+            response.status_code = 401
+            return response
+
+        g.user_id = payload['sub']
+        g.user = User.query.get(g.user_id)
+        return f(user, *args, **kwargs)
+    return decorated_function
+
+
+def admin_required(f):
+    @wraps(f)
+    @login_required
+    def decorated_function(user, *args, **kwargs):
+        if not user.is_admin:
+            response = jsonify(message='User do not have the right permission')
+            response.status_code = 403
+            return response
+        return f(user, *args, **kwargs)
+    return decorated_function
