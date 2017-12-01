@@ -9,6 +9,13 @@ class Commune(db.Model):
     institutions = db.relationship(
         'Institution', backref='commune', lazy='dynamic')
 
+    def to_json_min(self):
+        return{
+            "id": self.id,
+            "name": self.name,
+            "zip_code": self.zip_code
+        }
+
     def to_json(self):
         from app.wilaya.models import Wilaya
         return{

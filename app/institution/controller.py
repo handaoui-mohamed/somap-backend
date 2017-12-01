@@ -1,3 +1,15 @@
+from app import db
+from app.institution.models import Institution
+from flask import abort
+
+
+def checkInstitutionId(id):
+    institution = Institution.query.get(id)
+    if not institution or not institution.validated:
+        abort(404)
+    return institution
+
+
 def createInstitution(data):
     name = data.get('name').lower()
     description = data.get('description').lower()
@@ -6,11 +18,11 @@ def createInstitution(data):
     fax = data.get('fax')
     latitude = data.get('latitude')
     longitude = data.get('longitude')
-    wilaya = Wilaya.query.get(data.get('wilaya_id'))
-    commune = Commune.query.get(data.get('commune_id'))
-    institution_class = InstitutionClass.query.get(data.get('class_id'))
-    institution = Institution(name=name, description=description, commune=commune, address=address, phone=phone,
-                              fax=fax, latitude=latitude, longitude=longitude, wilaya=wilaya, institution_class=institution_class)
+    wilaya_id = data["wilaya"]["id"]
+    commune_id = data["commune"]["id"]
+    class_id = data["class"]["id"]
+    institution = Institution(name=name, description=description, address=address, phone=phone,
+                              fax=fax, latitude=latitude, longitude=longitude, commune_id=commune_id, wilaya_id=wilaya_id, class_id=class_id)
     return institution
 
 
@@ -22,9 +34,9 @@ def updateInstitution(institution, data):
     institution.fax = data.get('fax')
     institution.latitude = data.get('latitude')
     institution.longitude = data.get('longitude')
-    institution.wilaya = Wilaya.query.get(data.get('wilaya_id'))
-    institution.commune = Commune.query.get(data.get('commune_id'))
-    institution.institution_class = InstitutionClass.query.get(
-        data.get('class_id'))
+    institution.wilaya_id = data["wilaya"]["id"]
+    institution.commune_id = data["commune"]["id"]
+    institution.class_id = data["class"]["id"]
     institution.validated = data.get('validated', False)
-    return institution
+    db.session.add(institution)
+    db.session.commit()

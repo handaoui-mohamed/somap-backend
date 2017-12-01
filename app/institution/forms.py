@@ -21,15 +21,6 @@ class InstitutionForm(FlaskForm):
 	])
 	phone = StringField('phone')
 	fax = StringField('fax')
-	class_id=IntegerField('class_id', validators=[
-		DataRequired('Le type d\'institution est nécessaire')
-	])
-	wilaya_id=IntegerField('wilaya_id', validators=[
-		DataRequired('La wilaya est nécessaire')
-	])
-	commune_id=IntegerField('commune_id', validators=[
-		DataRequired('La commune est nécessaire')
-	])
 	longitude=FloatField('longitude', validators=[
 		DataRequired('Longitude est nécessaire')
 	])
@@ -43,17 +34,17 @@ class InstitutionForm(FlaskForm):
 		if not FlaskForm.validate(self):
 			return False
 
-		institution_class = InstitutionClass.query.get(self.class_id.data)
-		if institution_class is None:
-			self.class_id.errors.append('Le type d\'institution n\'existe pas!')
-			return False
-		wilaya = Wilaya.query.get(self.wilaya_id.data)
-		if wilaya is None:
-			self.wilaya_id.errors.append('La wilaya n\'existe pas!')
-			return False
+		# institution_class = InstitutionClass.query.get(self.class_id.data)
+		# if institution_class is None:
+		# 	self.class_id.errors.append('Le type d\'institution n\'existe pas!')
+		# 	return False
+		# wilaya = Wilaya.query.get(self.wilaya_id.data)
+		# if wilaya is None:
+		# 	self.wilaya_id.errors.append('La wilaya n\'existe pas!')
+		# 	return False
 
-		commune = Commune.query.get(self.commune_id.data)
-		if commune is None or commune.wilaya_id is not wilaya.id:
-			self.commune_id.errors.append('La commune n\'existe pas!')
-			return False
+		# commune = Commune.query.get(self.commune_id.data)
+		# if commune is None or commune.wilaya_id is not wilaya.id:
+		# 	self.commune_id.errors.append('La commune n\'existe pas!')
+		# 	return False
 		return True

@@ -18,7 +18,7 @@ def post():
     form = InstitutionClassForm(MultiDict(mapping=data))
     if form.validate():
         institutionClass = createInstitutionClass(data)
-        return jsonify({'element': institutionClass.to_json_min()}), 201
+        return jsonify({'element': institutionClass.to_json()}), 201
     return jsonify({"form_errors": form.errors}), 400
 
 

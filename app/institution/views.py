@@ -1,7 +1,7 @@
 from app import db, app
 from app.institution.models import Institution
 from app.institution.forms import InstitutionForm
-from app.institution.controller import createInstitution, updateInstitution
+from app.institution.controller import createInstitution, updateInstitution, checkInstitutionId
 from werkzeug.datastructures import MultiDict
 from flask import abort, request, jsonify
 
@@ -26,9 +26,7 @@ def add_institution():
 
 @app.route('/api/institutions/<int:id>')
 def get_institution(id):
-    institution = Institution.query.get(id)
-    if not institution or not institution.validated:
-        abort(404)
+    institution = checkInstitutionId(id)
     return jsonify({'element': institution.to_json()}), 200
 
 
@@ -40,8 +38,6 @@ def update_institution(id):
     data = request.get_json(force=True)
     form = InstitutionForm(MultiDict(mapping=data))
     if form.validate():
-        institution = updateInstitution(institution, data)
-        db.session.add(institution)
-        db.session.commit()
+        updateInstitution(institution, data)
         return jsonify({'element': institution.to_json_min()}), 201
     return jsonify({"form_errors": form.errors}), 400

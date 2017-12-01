@@ -13,6 +13,7 @@ class User(db.Model):
     email = db.Column(db.String(60))
     address = db.Column(db.String(100))
     phone = db.Column(db.String(20))
+    is_admin = db.Column(db.Boolean, default=False)
     wilaya_id = db.Column(db.Integer, db.ForeignKey('wilaya.id'))
 
     def hash_password(self, password):

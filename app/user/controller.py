@@ -15,9 +15,7 @@ def createUser(data):
     email = data.get('email').lower()
     address = data.get('address')
     phone = data.get('phone')
-    wilaya = data.get('wilaya')
-    if wilaya:
-        wilaya_id = wilaya.get('id')
+    wilaya_id = data["wilaya"]["id"]
     user = User(username=username, email=email.lower(), phone=phone,
                 address=address, wilaya_id=wilaya_id)
     user.hash_password(password)
@@ -31,9 +29,7 @@ def updateUser(user, data):
     user.email = data.get('email').lower()
     user.address = data.get('address')
     user.phone = data.get('phone')
-    wilaya = data.get('wilaya')
-    if wilaya:
-        user.wilaya_id = wilaya.get('id')
+    user.wilaya_id = data["wilaya"]["id"]
     password = data.get('password')
     if password:
         user.hash_password(password)

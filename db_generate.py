@@ -74,8 +74,10 @@ if args.institutions or args.all:
         institutions = json.load(institution_json)
 
     for institution in institutions:
+        wilaya = Wilaya.query.filter_by(
+            code=int(institution["wilayaID"])).first()
         commune = Commune.query.filter_by(
-            name=institution["commune"].lower(), wilaya_id=institution["wilayaID"]).first()
+            name=institution["commune"].lower(), wilaya_id=wilaya.id).first()
         db.session.add(Institution(
             name=institution["denomination"].lower(),
             description=institution["description"].lower(),
@@ -87,14 +89,14 @@ if args.institutions or args.all:
             longitude=institution["position"]["lng"],
             institution_class=InstitutionClass.query.get(
                 int(institution["typeId"]) + 1),
-            wilaya=Wilaya.query.get(int(institution["wilayaID"])),
+            wilaya=wilaya,
             validated=True))
     db.session.commit()
     print "Institution created successfully."
 
 if args.users or args.all:
     print "\nCreating users..."
-    user = User(username="admin", email="admin@somap.dz", wilaya_id=16)
+    user = User(username="admin", email="admin@somap.dz", wilaya_id=16, is_admin=True)
     user.hash_password("admin")
     db.session.add(user)
     db.session.commit()
