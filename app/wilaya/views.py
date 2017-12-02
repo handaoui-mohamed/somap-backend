@@ -15,7 +15,7 @@ def get_wilayas():
 
 @app.route('/api/wilayas', methods=["POST"])
 @admin_required
-def add_wilaya():
+def add_wilaya(currentUser):
     data = request.get_json(force=True)
     form = WilayaForm(MultiDict(mapping=data))
     if form.validate():
@@ -32,7 +32,7 @@ def get_wilaya_by_id(id):
 
 @app.route('/api/wilayas/<int:id>', methods=["PUT"])
 @admin_required
-def update_wilaya(id):
+def update_wilaya(currentUser, id):
     wilaya = checkWilayaId(id)
     data = request.get_json(force=True)
     form = WilayaForm(MultiDict(mapping=data))
@@ -44,7 +44,7 @@ def update_wilaya(id):
 
 @app.route('/api/wilayas/<int:id>', methods=["DELETE"])
 @admin_required
-def delete_wilaya(id):
+def delete_wilaya(currentUser, id):
     wilaya = checkWilayaId(id)
     db.session.delete(wilaya)
     db.session.commit()

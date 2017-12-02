@@ -15,7 +15,7 @@ def query():
 
 @app.route('/api/institution_classes', methods=["POST"])
 @admin_required
-def post():
+def post(currentUser):
     data = request.get_json(force=True)
     form = InstitutionClassForm(MultiDict(mapping=data))
     if form.validate():
@@ -32,7 +32,7 @@ def get(id):
 
 @app.route('/api/institution_classes/<int:id>', methods=["PUT"])
 @admin_required
-def put(id):
+def put(currentUser, id):
     institutionClass = checkInstitutionClassId(id)
     data = request.get_json(force=True)
     form = InstitutionClassForm(MultiDict(mapping=data))
@@ -44,7 +44,7 @@ def put(id):
 
 @app.route('/api/institution_classes/<int:id>', methods=["DELETE"])
 @admin_required
-def delete(id):
+def delete(currentUser, id):
     institutionClass = checkInstitutionClassId(id)
     db.session.delete(institutionClass)
     db.session.commit()

@@ -1,5 +1,10 @@
 from app import db
 from app.user.models import User
+from config import SECRET_KEY
+import jwt
+from jwt import DecodeError, ExpiredSignature
+from functools import wraps
+from flask import abort, request
 
 
 def checkUserId(id):
@@ -37,6 +42,11 @@ def updateUser(user, data):
     db.session.commit()
 
 
+def parse_token(req):
+    token = req.headers.get('Authorization').split()[1]
+    return jwt.decode(token, SECRET_KEY, algorithms='HS256')
+
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -44,7 +54,6 @@ def login_required(f):
             response = jsonify(message='Missing authorization header')
             response.status_code = 401
             return response
-
         try:
             payload = parse_token(request)
         except DecodeError:
@@ -55,9 +64,7 @@ def login_required(f):
             response = jsonify(message='Token has expired')
             response.status_code = 401
             return response
-
-        g.user_id = payload['sub']
-        g.user = User.query.get(g.user_id)
+        user = User.query.get(payload['sub'])
         return f(user, *args, **kwargs)
     return decorated_function
 

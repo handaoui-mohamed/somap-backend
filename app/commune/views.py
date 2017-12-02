@@ -15,7 +15,7 @@ def get_communes():
 
 @app.route('/api/communes', methods=["POST"])
 @admin_required
-def add_commune():
+def add_commune(currentUser):
     data = request.get_json(force=True)
     form = CommuneForm(MultiDict(mapping=data))
     if form.validate(data):
@@ -32,7 +32,7 @@ def get_commune_by_id(id):
 
 @app.route('/api/communes/<int:id>', methods=["PUT"])
 @admin_required
-def update_commune(id):
+def update_commune(currentUser, id):
     commune = checkCommuneId(id)
     data = request.get_json(force=True)
     form = CommuneForm(MultiDict(mapping=data))
@@ -44,7 +44,7 @@ def update_commune(id):
 
 @app.route('/api/communes/<int:id>', methods=["DELETE"])
 @admin_required
-def delete_commune(id):
+def delete_commune(currentUser, id):
     commune = checkCommuneId(id)
     db.session.delete(commune)
     db.session.commit()

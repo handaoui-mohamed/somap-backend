@@ -1,19 +1,21 @@
 from app import db, app
 from app.user.models import User
 from app.user.forms import RegistrationForm, UpdateForm, LoginForm
-from app.user.controller import createUser, updateUser, checkUserId
+from app.user.controller import createUser, updateUser, checkUserId, admin_required, login_required
 from flask import abort, request, jsonify
 from werkzeug.datastructures import MultiDict
 
 
 @app.route('/api/users')
-def get_users():
+@admin_required
+def get_users(currentUser):
     users = User.query.all()
     return jsonify({'elements': [element.to_json() for element in users]})
 
 
 @app.route('/api/users', methods=['POST'])
-def new_user():
+@admin_required
+def new_user(currentUser):
     data = request.get_json(force=True)
     form = RegistrationForm(MultiDict(mapping=data))
     if form.validate():
@@ -23,13 +25,15 @@ def new_user():
 
 
 @app.route('/api/users/<int:id>')
-def get_user_by_id(id):
+@login_required
+def get_user_by_id(currentUser, id):
     user = checkUserId(id)
     return jsonify({'element': user.to_json()})
 
 
 @app.route('/api/users/<int:id>', methods=["DELETE"])
-def delete_user(id):
+@admin_required
+def delete_user(currentUser, id):
     user = checkUserId(id)
     db.session.delete(user)
     db.session.commit()
@@ -37,7 +41,8 @@ def delete_user(id):
 
 
 @app.route('/api/users/<int:id>', methods=["PUT"])
-def update_user(id):
+@admin_required
+def update_user(currentUser, id):
     user = checkUserId(id)
     data = request.get_json(force=True)
     form = UpdateForm(MultiDict(mapping=data))
@@ -57,6 +62,6 @@ def login():
         user = User.query.filter_by(username=username).first()
         if not user or not user.verify_password(password):
             abort(404)
-        token = user.generate_auth_token()
-        return jsonify({'token': token.decode('ascii'), 'user': user.to_json()})
+        token = user.create_token()
+        return jsonify({'token': token, 'user': user.to_json()})
     return jsonify({"form_errors": form.errors}), 400
