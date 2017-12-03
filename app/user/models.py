@@ -39,6 +39,7 @@ class User(db.Model):
             'email': self.email,
             'phone': self.phone,
             'address': self.address,
+            'isAdmin': self.is_admin,
             "wilaya": Wilaya.query.get(self.wilaya_id or 16).to_json_min()
         }
 
